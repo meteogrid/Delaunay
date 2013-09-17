@@ -15,6 +15,7 @@ import Data.Maybe(fromJust)
 
 import Data.List
 
+import Debug.Trace (traceShow)
 
 
 
@@ -195,9 +196,9 @@ addPoints trig [] = trig
 addPoints !trig (pt:pts) = addPoints (addPoint trig pt) pts
     
 addPoint :: Triangulation -> Pt -> Triangulation
-addPoint trig pt = makeDelaunay 
-                   trig'
-                   splittedTris
+addPoint trig pt
+  | null tris = traceShow ("addPoint: no tris", (trig, pt)) trig
+  | otherwise = makeDelaunay trig' splittedTris
   where
     potentialTris = triangulationToTris trig
     tris = filter (`fastContainsPoint` pt) potentialTris
